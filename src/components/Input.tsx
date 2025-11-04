@@ -37,7 +37,6 @@ const Input: React.FC<InputProps> = ({
     handleFormClose();
   }
   // console.log(categories);
-  console.log(formData);
   return (
     <div className="p-2">
       <form

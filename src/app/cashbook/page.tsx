@@ -77,7 +77,7 @@ const Page = () => {
     const { data, error } = await supabase
       .from("transactions_test")
       .select(
-        `id, date, description, amount, mode, category_id : category, category(category_name)`
+        `id, date, description, amount, mode, category, category_name: category(category_name)`
       )
       .order("date", { ascending: false })
       .order("id", { ascending: false });
@@ -85,11 +85,6 @@ const Page = () => {
     if (error) {
       console.log("Fetching data failed", error);
     } else {
-      // const transformedData = data.map((transaction) => ({
-      //   ...transaction,
-      //   category: transaction.category[0] ?? { category_name: "Uncategorized" },
-      // }));
-      console.log(data[1]);
       setTransactions((data as unknown as Transaction[]) || []);
     }
 
@@ -98,18 +93,16 @@ const Page = () => {
 
   //Category Filter
   async function handleCategoryFilter(id: number) {
-    console.log(id);
     if (id === 0) {
       fetchTransactions();
     } else {
       const { data } = await supabase
         .from("transactions_test")
         .select(
-          "id, date, description, amount, mode, category_id : category, category(category_name)"
+          `id, date, description, amount, mode, category, category_name: category(category_name)`
         )
         .eq("category", id)
         .order("date", { ascending: false });
-      console.log(data);
       setTransactions((data as unknown as Transaction[]) || []);
     }
   }
@@ -120,21 +113,19 @@ const Page = () => {
       const { data } = await supabase
         .from("transactions_test")
         .select(
-          "id, date, description, amount, mode, category_id : category, category(category_name)"
+          `id, date, description, amount, mode, category, category_name: category(category_name)`
         )
         .eq("mode", "CashIn")
         .order("date", { ascending: false });
-      console.log(data);
       setTransactions((data as unknown as Transaction[]) || []);
     } else if (value === "CashOut") {
       const { data } = await supabase
         .from("transactions_test")
         .select(
-          "id, date, description, amount, mode, category_id : category, category(category_name)"
+          `id, date, description, amount, mode, category, category_name: category(category_name)`
         )
         .eq("mode", "CashOut")
         .order("date", { ascending: false });
-      console.log(data);
       setTransactions((data as unknown as Transaction[]) || []);
     } else if (value === "all") {
       fetchTransactions();
@@ -143,26 +134,14 @@ const Page = () => {
 
   //Date Filter
   async function handleDateFilter([date1, date2]: [Date | null, Date | null]) {
-    // const year = update[1].getFullYear();
-    // const month = String(update[1].getMonth() + 1).padStart(2, "0");
-    // const day = String(update[1].getDate()).padStart(2, "0");
     const sDate = date1?.toLocaleDateString("en-CA");
     const eDate = date2?.toLocaleDateString("en-CA");
-    console.log(sDate);
-    console.log(eDate);
-    // const sDate = `${date1?.getFullYear()}-${String(
-    //   date1?.getMonth() + 1
-    // ).padStart(2, "0")}-${String(date1?.getDate()).padStart(2, "0")}`;
-    // const eDate = `${date2?.getFullYear()}-${String(
-    //   date2?.getMonth() + 1
-    // ).padStart(2, "0")}-${String(date2?.getDate()).padStart(2, "0")}`;
-
     setDateRange([date1, date2]);
 
     const { data, error } = await supabase
       .from("transactions_test")
       .select(
-        "id, date, description, amount, mode, category_id : category, category(category_name)"
+        `id, date, description, amount, mode, category, category_name: category(category_name)`
       )
       .gte("date", sDate)
       .lte("date", eDate)
@@ -170,18 +149,15 @@ const Page = () => {
     if (error) {
       console.log(error);
     }
-    console.log(data);
     setTransactions((data as unknown as Transaction[]) || []);
   }
   //Form Input
   async function handleInputData(formData: Transaction) {
     setInputData(formData);
-    console.log(editId);
     // console.log("Form Data :", formData);
     //UPDATE
     if (editId !== 0) {
       const { category_name, ...updatedData } = formData;
-      console.log("Form Data :", updatedData);
       const { error } = await supabase
         .from("transactions_test")
         .update(updatedData)
@@ -225,7 +201,6 @@ const Page = () => {
     if (transaction.id !== undefined) {
       setEditId(transaction.id);
     }
-    console.log(transaction.id);
     setInputData(transaction);
     if (transaction.mode === "CashIn") {
       setInputData(transaction);
@@ -238,7 +213,6 @@ const Page = () => {
 
   // Delete Data
   async function handleDelete(transaction: Transaction) {
-    console.log(transaction.id);
     const { error } = await supabase
       .from("transactions_test")
       .delete()
