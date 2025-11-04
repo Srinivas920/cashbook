@@ -21,7 +21,9 @@ const TransactionCard: React.FC<TransactionProps> = ({
       >
         <li className="flex-1 text-center p-3">{transaction.date}</li>
         <li className="flex-2 p-3">{transaction.description}</li>
-        <li className="flex-1 p-3">{transaction.category?.category_name}</li>
+        <li className="flex-1 p-3">
+          {transaction.category_name?.category_name}
+        </li>
         <li
           className={`flex-1 text-right py-3 pr-10 ${
             transaction.mode === "CashIn" ? "text-green-600" : " text-red-600"

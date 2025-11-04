@@ -25,7 +25,7 @@ const Page = () => {
     date: "",
     description: "",
     amount: 0,
-    category_id: 1,
+    category: 1,
     mode: "",
   });
   const [summary, setSummary] = useState<SummaryType>({
@@ -180,7 +180,7 @@ const Page = () => {
     // console.log("Form Data :", formData);
     //UPDATE
     if (editId !== 0) {
-      const { category, ...updatedData } = formData;
+      const { category_name, ...updatedData } = formData;
       console.log("Form Data :", updatedData);
       const { error } = await supabase
         .from("transactions_test")
@@ -213,7 +213,7 @@ const Page = () => {
       date: "",
       description: "",
       amount: 0,
-      category_id: 0,
+      category: 0,
       mode: "",
     });
     setEntryType("");
