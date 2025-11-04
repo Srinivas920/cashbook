@@ -137,20 +137,24 @@ const Page = () => {
   }
 
   //Date Filter
-  async function handleDateFilter([date1, date2]: [Date, Date]) {
+  async function handleDateFilter([date1, date2]: [Date | null, Date | null]) {
     // const year = update[1].getFullYear();
     // const month = String(update[1].getMonth() + 1).padStart(2, "0");
     // const day = String(update[1].getDate()).padStart(2, "0");
-    const sDate = `${date1?.getFullYear()}-${String(
-      date1?.getMonth() + 1
-    ).padStart(2, "0")}-${String(date1?.getDate()).padStart(2, "0")}`;
-    const eDate = `${date2?.getFullYear()}-${String(
-      date2?.getMonth() + 1
-    ).padStart(2, "0")}-${String(date2?.getDate()).padStart(2, "0")}`;
-    console.log();
+    const sDate = date1?.toLocaleDateString("en-CA");
+    const eDate = date2?.toLocaleDateString("en-CA");
+    console.log(sDate);
+    console.log(eDate);
+    // const sDate = `${date1?.getFullYear()}-${String(
+    //   date1?.getMonth() + 1
+    // ).padStart(2, "0")}-${String(date1?.getDate()).padStart(2, "0")}`;
+    // const eDate = `${date2?.getFullYear()}-${String(
+    //   date2?.getMonth() + 1
+    // ).padStart(2, "0")}-${String(date2?.getDate()).padStart(2, "0")}`;
+
     setDateRange([date1, date2]);
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("transactions_test")
       .select(
         "id, date, description, amount, mode, category, category:tr_category_fk (category_name)"
@@ -158,6 +162,9 @@ const Page = () => {
       .gte("date", sDate)
       .lte("date", eDate)
       .order("date", { ascending: false });
+    if (error) {
+      console.log(error);
+    }
     console.log(data);
     setTransactions(data || []);
   }
