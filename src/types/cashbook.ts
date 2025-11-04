@@ -4,7 +4,7 @@ interface Transaction {
   description: string;
   amount: number;
   category: number;
-  category_name?: { category_name: string }[];
+  category_name?: { category_name: string };
   mode: string;
 }
 
