@@ -43,7 +43,7 @@ interface FiltersProps {
   endDate: Date | null;
   handleCategoryFilter: (id: number) => void;
   handleTypeFilter: (value: string) => void;
-  handleDateFilter: (update: [Date | null, Date | null]) => void;
+  handleDateFilter: (update: [Date, Date]) => void;
 }
 
 interface InputProps {
