@@ -11,10 +11,6 @@ import { Transaction, Categories, SummaryType } from "@/types/cashbook";
 import toast, { Toaster } from "react-hot-toast";
 
 const Page = () => {
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
-
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Categories[]>([]);
   // const [categoryFilter, setCategoryFilter] = useState<string>("");
@@ -92,7 +88,9 @@ const Page = () => {
 
     // calculateSummary(transactions);
   }
-
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
   //Category Filter
   async function handleCategoryFilter(id: number) {
     console.log(id);
@@ -139,7 +137,7 @@ const Page = () => {
   }
 
   //Date Filter
-  async function handleDateFilter([date1, date2]: [Date | null, Date | null]) {
+  async function handleDateFilter([date1, date2]: [Date, Date]) {
     // const year = update[1].getFullYear();
     // const month = String(update[1].getMonth() + 1).padStart(2, "0");
     // const day = String(update[1].getDate()).padStart(2, "0");
