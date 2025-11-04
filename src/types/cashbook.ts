@@ -3,8 +3,8 @@ interface Transaction {
   date: string;
   description: string;
   amount: number;
-  category: number;
-  category_name?: { category_name: string };
+  category_id: number;
+  category?: { category_name: string };
   mode: string;
 }
 

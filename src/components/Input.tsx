@@ -10,7 +10,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const [formData, setFormData] = useState({
     ...inputData,
-    category: 1,
+    category_id: 1,
     mode: entryType,
   });
 
@@ -31,7 +31,7 @@ const Input: React.FC<InputProps> = ({
       date: "",
       description: "",
       amount: 0,
-      category: 1,
+      category_id: 1,
       mode: "",
     });
     handleFormClose();
@@ -87,11 +87,11 @@ const Input: React.FC<InputProps> = ({
           <label className="mr-2">Category</label>
           <select
             className="flex-1"
-            value={formData.category}
+            value={formData.category_id}
             onChange={(event) => {
               setFormData({
                 ...formData,
-                category: parseInt(event.target.value),
+                category_id: parseInt(event.target.value),
               });
             }}
           >

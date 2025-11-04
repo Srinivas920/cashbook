@@ -25,7 +25,7 @@ const Page = () => {
     date: "",
     description: "",
     amount: 0,
-    category: 1,
+    category_id: 1,
     mode: "",
   });
   const [summary, setSummary] = useState<SummaryType>({
@@ -45,7 +45,9 @@ const Page = () => {
     }
     fetchCategories();
   }, []);
-
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
   // Calculate Summary
   useEffect(() => {
     function calculateSummary(transactions: Transaction[]) {
@@ -75,22 +77,25 @@ const Page = () => {
     const { data, error } = await supabase
       .from("transactions_test")
       .select(
-        "id, date, description, amount, mode, category, category_name:tr_category_fk (category_name)"
+        `id, date, description, amount, mode, category_id : category, category(category_name)`
       )
       .order("date", { ascending: false })
       .order("id", { ascending: false });
+
     if (error) {
       console.log("Fetching data failed", error);
     } else {
-      console.log(data);
-      setTransactions(data || []);
+      // const transformedData = data.map((transaction) => ({
+      //   ...transaction,
+      //   category: transaction.category[0] ?? { category_name: "Uncategorized" },
+      // }));
+      console.log(data[1]);
+      setTransactions((data as unknown as Transaction[]) || []);
     }
 
     // calculateSummary(transactions);
   }
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
+
   //Category Filter
   async function handleCategoryFilter(id: number) {
     console.log(id);
@@ -100,12 +105,12 @@ const Page = () => {
       const { data } = await supabase
         .from("transactions_test")
         .select(
-          "id, date, description, amount, mode, category, category_name:tr_category_fk (category_name)"
+          "id, date, description, amount, mode, category_id : category, category(category_name)"
         )
         .eq("category", id)
         .order("date", { ascending: false });
       console.log(data);
-      setTransactions(data || []);
+      setTransactions((data as unknown as Transaction[]) || []);
     }
   }
 
@@ -115,22 +120,22 @@ const Page = () => {
       const { data } = await supabase
         .from("transactions_test")
         .select(
-          "id, date, description, amount, mode, category,category_name:tr_category_fk (category_name)"
+          "id, date, description, amount, mode, category_id : category, category(category_name)"
         )
         .eq("mode", "CashIn")
         .order("date", { ascending: false });
       console.log(data);
-      setTransactions(data || []);
+      setTransactions((data as unknown as Transaction[]) || []);
     } else if (value === "CashOut") {
       const { data } = await supabase
         .from("transactions_test")
         .select(
-          "id, date, description, amount, mode, category, category_name:tr_category_fk (category_name)"
+          "id, date, description, amount, mode, category_id : category, category(category_name)"
         )
         .eq("mode", "CashOut")
         .order("date", { ascending: false });
       console.log(data);
-      setTransactions(data || []);
+      setTransactions((data as unknown as Transaction[]) || []);
     } else if (value === "all") {
       fetchTransactions();
     }
@@ -157,7 +162,7 @@ const Page = () => {
     const { data, error } = await supabase
       .from("transactions_test")
       .select(
-        "id, date, description, amount, mode, category, category:tr_category_fk (category_name)"
+        "id, date, description, amount, mode, category_id : category, category(category_name)"
       )
       .gte("date", sDate)
       .lte("date", eDate)
@@ -166,7 +171,7 @@ const Page = () => {
       console.log(error);
     }
     console.log(data);
-    setTransactions(data || []);
+    setTransactions((data as unknown as Transaction[]) || []);
   }
   //Form Input
   async function handleInputData(formData: Transaction) {
@@ -175,7 +180,7 @@ const Page = () => {
     // console.log("Form Data :", formData);
     //UPDATE
     if (editId !== 0) {
-      const { category_name, ...updatedData } = formData;
+      const { category, ...updatedData } = formData;
       console.log("Form Data :", updatedData);
       const { error } = await supabase
         .from("transactions_test")
@@ -208,7 +213,7 @@ const Page = () => {
       date: "",
       description: "",
       amount: 0,
-      category: 0,
+      category_id: 0,
       mode: "",
     });
     setEntryType("");
