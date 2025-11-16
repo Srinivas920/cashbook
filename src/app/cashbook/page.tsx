@@ -258,16 +258,26 @@ const Page = () => {
               setEntryType("CashOut");
             }}
           />
-          {entryType && (
-            <Input
-              entryType={entryType}
-              categories={categories}
-              inputData={inputData}
-              handleInputData={handleInputData}
-              handleFormClose={handleFormClose}
-            />
-          )}
-          {!entryType && <Summary summary={summary} />}
+          <div className="py-8 rounded-2xl px-4 ml-2 mt-2">
+            <div>
+              {entryType && (
+                <Input
+                  entryType={entryType}
+                  categories={categories}
+                  inputData={inputData}
+                  handleInputData={handleInputData}
+                  handleFormClose={handleFormClose}
+                />
+              )}
+            </div>
+            <div
+              className={
+                entryType || `transform transition duration-100 ease-in-out`
+              }
+            >
+              {!entryType && <Summary summary={summary} />}
+            </div>
+          </div>
         </div>
       </div>
     </div>
